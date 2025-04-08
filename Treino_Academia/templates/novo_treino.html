@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Treino</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            margin: 0;
+            padding: 16px;
+            font-size: 16px;
+            color: #fdfdfd;
+        }
+
+        h2, h3 {
+            color: #FFD700;
+            margin-top: 0;
+        }
+
+        label {
+            font-weight: bold;
+            color: #f1f1f1;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0 12px 0;
+            border-radius: 8px;
+            border: none;
+            background-color: #2a2a2a;
+            color: #f9f9f9;
+        }
+
+        .exercicio {
+            background: #1e1e1e;
+            border-left: 4px solid #FFD700;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-add {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+        .btn-add:hover {
+            background-color: #e6c200;
+            transform: scale(1.02);
+        }
+
+        .logout {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .logout:hover {
+            text-decoration: underline;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <h2>Adicionar Novo Treino</h2>
+
+    <form method="POST" action="/adicionar_treino">
+        <label for="nome_treino">Nome do Treino:</label>
+        <input type="text" name="nome_treino" id="nome_treino" required>
+
+        <div id="exercicios-container">
+            <div class="exercicio">
+                <label>Nome do Exercício:</label>
+                <input type="text" name="nome_exercicio" required>
+
+                <label>Repetições:</label>
+                <input type="text" name="repeticoes" required>
+
+                <label>Peso (kg):</label>
+                <input type="text" name="peso" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="addExercicio()" class="btn btn-add">+ Adicionar Exercício</button>
+        <button type="submit" class="btn btn-add">Salvar Treino</button>
+    </form>
+
+    <a href="/dashboard" class="logout">Voltar</a>
+
+    <script>
+        function addExercicio() {
+            const container = document.getElementById('exercicios-container');
+            const novo = document.createElement('div');
+            novo.classList.add('exercicio');
+            novo.innerHTML = `
+                <label>Nome do Exercício:</label>
+                <input type="text" name="nome_exercicio" required>
+
+                <label>Repetições:</label>
+                <input type="text" name="repeticoes" required>
+
+                <label>Peso (kg):</label>
+                <input type="text" name="peso" required>
+            `;
+            container.appendChild(novo);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Treinos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            margin: 0;
+            padding: 16px;
+            font-size: 16px;
+            color: #fdfdfd;
+        }
+
+        h2, h3 {
+            color: #FFD700;
+            margin-top: 0;
+        }
+
+        .treino {
+            background-color: #1e1e1e;
+            border-left: 6px solid #FFD700;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.15);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .treino-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background-color: #333;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            text-align: center;
+            line-height: 36px;
+            cursor: pointer;
+            color: #FFD700;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:hover {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+        .exercicios {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .exercicio {
+            background: #2a2a2a;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border-left: 4px solid #FFD700;
+            font-size: 15px;
+            color: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exercicio input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            background-color: #333;
+            border: 2px solid #FFD700;
+            border-radius: 4px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+        }
+
+        .btn-add {
+            background-color: #FFD700;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .btn-add:hover {
+            background-color: #e6c200;
+            transform: scale(1.02);
+        }
+
+        .logout {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .logout:hover {
+            text-decoration: underline;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <h2>Seus Treinos</h2>
+
+        {% for treino in treinos %}
+            <div class="treino">
+                <div class="treino-header">
+                    <h3>{{ treino.nome_treino }}</h3>
+                    <div class="icons">
+                        <form method="post" action="/excluir_treino/{{ treino.id }}" onsubmit="return confirm('Deseja excluir este treino?');">
+                            <button type="submit" class="icon-btn" title="Excluir">🗑️</button>
+                        </form>
+                        <a href="{{ url_for('editar_treino', treino_id=treino.id) }}" class="icon-btn" title="Editar">✏️</a>
+                    </div>
+                </div>
+                <div class="exercicios">
+                    {% for ex in treino.exercicios %}
+                        <div class="exercicio">
+                            <div>
+                                <strong>{{ ex[1] }}</strong><br>
+                                Repetições: <b>{{ ex[2] }}</b> | Peso: <b>{{ ex[3] }} kg</b>
+                            </div>
+                            <input type="checkbox" name="exercicios_concluidos" value="{{ ex[0] }}" title="Marcar como concluído">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+    </form>
+
+    <a href="/novo_treino" class="btn btn-add" style="text-decoration: none; display: block; margin-bottom: 20px;">+ Criar Novo Treino</a>
+    <a href="/evolucao_peso" class="btn btn-add" style="text-decoration: none; display: block; margin-bottom: 20px;">📈Evolução de Peso</a>
+    <a href="/sobre" class="btn btn-add" style="text-decoration: none; display: block; margin-bottom: 20px;">Sobre</a>
+    <a href="/logout" class="logout">Sair</a>
+</body>
+</html>

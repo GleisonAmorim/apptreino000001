@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Treino</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            margin: 0;
+            padding: 16px;
+            font-size: 16px;
+            color: #fdfdfd;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.15);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h2, h3 {
+            color: #FFD700;
+            margin-top: 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            border-radius: 6px;
+            border: 1px solid #FFD700;
+            background-color: #333;
+            color: #fdfdfd;
+        }
+
+        .btn {
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-salvar {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+        .btn-salvar:hover {
+            background-color: #e6c200;
+            transform: scale(1.02);
+        }
+
+        .btn-add {
+            background-color: #FFD700;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .btn-add:hover {
+            background-color: #e6c200;
+            transform: scale(1.02);
+        }
+
+        .btn-remover {
+          background-color: #333;
+          border: none;
+          border-radius: 50%;
+          width: 36px;
+          height: 36px;
+          font-size: 18px;
+          text-align: center;
+          line-height: 36px;
+          cursor: pointer;
+          color: #FFD700;
+          transition: background 0.2s;
+      
+
+        }
+        .btn-remover:hover {
+          background-color: #FFD700;
+          color: #000;
+      }
+        .exercicio-grupo {
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #FFD700;
+        }
+
+        .logout {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .logout:hover {
+            text-decoration: underline;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Editar Treino</h2>
+        <form method="post" action="">
+            <label for="nome_treino">Nome do Treino:</label>
+            <input type="text" name="nome_treino" value="{{ nome_treino }}" required>
+
+            <h3>Exercícios Existentes</h3>
+            {% for ex in exercicios %}
+                <div class="exercicio-grupo" data-id="{{ ex[0] }}">
+                    <input type="hidden" name="exercicio_id" value="{{ ex[0] }}">
+                    <input type="text" name="nome_exercicio_existente" value="{{ ex[1] }}" required>
+                    <input type="text" name="repeticoes_existente" value="{{ ex[2] }}" required>
+                    <input type="text" name="peso_existente" value="{{ ex[3] }}" required>
+                    <button type="button" class="btn-remover" onclick="removerExercicio(this, '{{ ex[0] }}')">🗑️</button>
+                </div>
+            {% endfor %}
+
+            <input type="hidden" name="excluir_exercicio_id" id="excluir_ids">
+
+            <h3>Adicionar Novo Exercício</h3>
+            <div id="novos_exercicios">
+                <div class="exercicio-grupo">
+                    <input type="text" name="nome_exercicio" placeholder="Exercício">
+                    <input type="text" name="repeticoes" placeholder="Repetições">
+                    <input type="text" name="peso" placeholder="Peso (kg)">
+                </div>
+            </div>
+
+            <button type="button" onclick="addNovoExercicio()" class="btn btn-add">+ Adicionar Exercício</button>
+            <input type="submit" value="Salvar Alterações" class="btn btn-salvar">
+        </form>
+    </div>
+
+    <script>
+        function addNovoExercicio() {
+            const container = document.getElementById('novos_exercicios');
+            container.insertAdjacentHTML('beforeend', `
+                <div class="exercicio-grupo">
+                    <input type="text" name="nome_exercicio" placeholder="Exercício">
+                    <input type="text" name="repeticoes" placeholder="Repetições">
+                    <input type="text" name="peso" placeholder="Peso (kg)">
+                </div>
+            `);
+        }
+
+        function removerExercicio(button, id) {
+            const grupo = button.parentElement;
+            grupo.remove();
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'excluir_exercicio_id';
+            hiddenInput.value = id;
+            document.querySelector('form').appendChild(hiddenInput);
+        }
+    </script>
+</body>
+</html>
