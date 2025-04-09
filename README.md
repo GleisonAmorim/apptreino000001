@@ -33,6 +33,6 @@ Este é um sistema web desenvolvido para auxiliar no controle de treinos persona
 Este projeto foi desenvolvido com o intuito de praticar conceitos de desenvolvimento web com Python e Flask, além de aplicar conhecimentos de frontend e deploy de aplicações em nuvem.
 
 ## 🛠️ Como executar:
-Acesse https://bistreperch.onpella.app/ Crie seu usuário ou utilize o usuário teste
+Acesse https://ecruwalrus.onpella.app/ Crie seu usuário ou utilize o usuário teste
 Usuário: gamorim
 Senha: senha
