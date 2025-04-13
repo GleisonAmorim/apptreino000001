@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Evolução de Peso</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Link para o ícone da lixeira -->
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            margin: 0;
+            padding: 16px;
+            font-size: 16px;
+            color: #fdfdfd;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #FFD700;
+        }
+
+
+
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #2a2a2a;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #FFD700;
+            color: #000;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e6c200;
+            transform: scale(1.02);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            color: #f9f9f9;
+        }
+
+        th {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+        .btn-voltar {
+            display: block;
+            margin: 30px auto 10px auto;
+            padding: 12px 24px;
+            background-color: #FFD700;
+            color: #000;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            width: fit-content;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-voltar:hover {
+            background-color: #e6c200;
+            transform: scale(1.03);
+        }
+
+        .resumo-progresso {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #FFD700;
+        }
+
+        canvas {
+            display: block;
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 600px) {
+            form, table, canvas {
+                width: 100%;
+            }
+        }
+
+        .logout {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .logout:hover {
+            text-decoration: underline;
+            color: #FFD700;
+        }
+
+        .icon-btn {
+            background-color: #333;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            text-align: center;
+            line-height: 36px;
+            cursor: pointer;
+            color: #FFD700;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:hover {
+            background-color: #FFD700;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Evolução de Peso</h1>
+
+    <form action="{{ url_for('evolucao_peso') }}" method="POST">
+        <label for="data_peso">Data:</label>
+        <input type="date" name="data_peso" required>
+
+        <label for="peso">Peso (kg):</label>
+        <input type="number" step="0.1" name="peso" required>
+
+        <input type="submit" value="Registrar Peso">
+    </form>
+
+    {% if progresso_total %}
+    <div class="resumo-progresso">
+        Progresso Total: 
+        {% if progresso_total < 0 %}
+            📉 {{ progresso_total | abs }} kg perdidos!
+        {% elif progresso_total > 0 %}
+            📈 {{ progresso_total }} kg ganhos!
+        {% else %}
+            😐 Peso estável!
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <canvas id="graficoPeso" height="250"></canvas>
+
+    <h2>Histórico</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Peso (kg)</th>
+                <th>Ação</th> <!-- NOVA COLUNA -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(registros|length) %}
+            <tr>
+                <td>{{ registros[i][0] }}</td>
+                <td style="color:
+                    {% if i > 0 and registros[i][1] < registros[i-1][1] %}#4CAF50
+                    {% elif i > 0 and registros[i][1] > registros[i-1][1] %}#FF5252
+                    {% else %}#fdfdfd{% endif %}">
+                    {{ registros[i][1] }}
+                </td>
+                <td>
+                    <form action="{{ url_for('excluir_peso', id=registros[i][2]) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este registro?');">
+                        <button type="submit" class="icon-btn" title="Excluir">🗑️</button>
+       
+                    </form>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/dashboard" class="logout">Voltar</a>
+
+    <script>
+        // Converte datas do formato 'yyyy-mm-dd' para 'dd/mm/yy'
+        const rawDates = {{ datas|safe }};
+        const formattedDates = rawDates.map(d => {
+            const [year, month, day] = d.split('-');
+            return `${day}/${month}/${year.slice(2)}`;
+        });
+    
+        const pesos = {{ pesos|safe }};
+    
+        const ctx = document.getElementById('graficoPeso').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: formattedDates, // ← AGORA ESTÁ USANDO AS DATAS FORMATADAS
+                datasets: [{
+                    label: 'Peso (kg)',
+                    data: pesos,
+                    borderColor: '#FFD700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#fdfdfd'
+                        },
+                        grid: {
+                            color: '#333'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            color: '#fdfdfd'
+                        },
+                        grid: {
+                            color: '#333'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#fdfdfd'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    
+    <script>
+        // Salva a posição do scroll antes de enviar qualquer formulário
+        document.querySelectorAll("form").forEach(form => {
+            form.addEventListener("submit", () => {
+                sessionStorage.setItem("scrollPos", window.scrollY);
+            });
+        });
+    
+        // Restaura a posição do scroll após o carregamento da página
+        window.addEventListener("load", () => {
+            const scrollPos = sessionStorage.getItem("scrollPos");
+            if (scrollPos !== null) {
+                window.scrollTo(0, parseInt(scrollPos));
+                sessionStorage.removeItem("scrollPos");
+            }
+        });
+    </script> 
+</body>
+</html>
