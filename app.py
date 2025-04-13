@@ -297,5 +297,4 @@ def logout():
     return redirect('/login')
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Usa a variável PORT do Railway ou 5000 como fallback
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=True)
