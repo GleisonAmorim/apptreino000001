@@ -33,6 +33,7 @@ Este é um sistema web desenvolvido para auxiliar no controle de treinos persona
 Este projeto foi desenvolvido com o intuito de praticar conceitos de desenvolvimento web com Python e Flask, além de aplicar conhecimentos de frontend e deploy de aplicações em nuvem.
 
 ## 🛠️ Como executar:
-Acesse https://treino-r2dq.onrender.com/login Crie seu usuário ou utilize o usuário teste
+Acesse: https://treino-r2dq.onrender.com/login Crie seu usuário ou utilize o usuário teste
+Download APK: https://drive.google.com/drive/folders/1j1neBx4TGWkqGybO4jq3-DSKF7hc6Cj6?usp=sharing
 
 Obs: (Está demorando +- 50 segundos para rodar, porque o servidor é gratuito e por isso existe um delay para carregar a aplicação)
