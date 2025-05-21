@@ -26,7 +26,7 @@ Este é um sistema web desenvolvido para auxiliar no controle de treinos persona
 - Gestão de perda de peso com gráfico interativo
 - Visualização e edição dos treinos
 - Interface amigável e responsiva
-- Deploy gratuito com Railway
+- Deploy gratuito com Render
 
 ## 🧠 Objetivo
 
