@@ -540,6 +540,21 @@ def logout():
     # Após limpar a sessão, redireciona para a página de login
     return redirect('/login')
 
+
+# =========================
+# EXECUÇÃO DA APLICAÇÃO
+# =========================
+# Este bloco garante que o servidor Flask só será iniciado
+# quando este arquivo for executado diretamente
+# (e não quando for importado por outro arquivo)
 if __name__ == '__main__':
+
+    # Define a porta do servidor:
+    # - Usa a variável de ambiente PORT (caso exista)
+    # - Caso contrário, utiliza a porta padrão 5000
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+
+    # Inicia o servidor Flask
+    # host='0.0.0.0' permite acesso externo (ex: rede/local ou deploy)
+    # debug=True ativa mensagens de erro detalhadas (apenas para desenvolvimento)
+    app.run(host='0.0.0.0', port=port, debug=True)
